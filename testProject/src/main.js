@@ -4,7 +4,7 @@
 }) 
 
 function modalA(){
-  addRadioToModalB();
+  modalError();
 }
 
 
@@ -41,4 +41,22 @@ function addRadioToModalB(){
   </form>
 
   `;
+}
+
+function modalError(){
+  let modalError = document.querySelector(".modal-error");
+  modalError.innerHTML +=
+  `
+  You didn't select anything
+  <button class= "btn-2"> Try Again </button>
+  `
+}
+
+function modalSuccess(){
+  let modalSuccess = document.querySelector(".modal-success");
+  modalSuccess.innerHTML +=
+  `
+ Thank you for sharing!<br> 
+ <button class= "btn-2"> Close </button>
+  `
 }
