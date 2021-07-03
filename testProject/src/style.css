@@ -16,8 +16,15 @@
   align-items: center;
 }
 
-.modal{
+.modal-a{
   background-color: #e8efe9;
+  color:#203a47;
+  text-align: center;
+}
+.modal-b{
+  background-color: #e8efe9;
+  color:#203a47;
+  text-align: center;
 }
 
 .btn{
