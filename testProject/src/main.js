@@ -4,38 +4,34 @@
 
 }) 
 
+
 function modalA(){
-  addRadioToModalA();
-}
-
-
-
-function addRadioToModalA(){
   let modal = document.querySelector(".modal");
  
-  modal.innerHTML +=
+  modal.innerHTML =
   `
   <span class="modal-close"> X </span>
   <form> 
   <label class="label"> We want to make sure we offer relevant products</label> <br> <br>
   <Strong> Do you have any children? </Strong><br>
   <strong> Yes </strong>
-  <input  type="radio" class="radio" id="modalAYes" name="radioA" value= "true">
+  <input  type="radio" class="radio" id="modalAYes" name="radioA" value="yes">
   <strong> No </strong> 
-  <input  type="radio" class="radio" id="modalANo" name="radioA" value= "false"><br>
+  <input  type="radio" class="radio" id="modalANo" name="radioA" value="no"><br>
   <input type="submit" class="btn" value="Submit">
   </form>
-
   `;
-
-
-  modal.addEventListener('submit', addRadioToModalB)
-  console.log(modal.value)
+ 
+  modal.addEventListener('submit', modalCheck)
 
 }
 
-function addRadioToModalB(event){
+
+
+function modalB(event){
+  
   event.preventDefault();
+  
   let modal = document.querySelector(".modal");
   modal.innerHTML =
   `
@@ -62,8 +58,8 @@ function modalError(){
   `
 }
 
-function modalSuccess(event){
-event.preventDefault();
+function modalSuccess(){
+
   let modalSuccess = document.querySelector(".modal");
   modalSuccess.innerHTML =
   `
@@ -73,13 +69,20 @@ event.preventDefault();
 }
 
 
-function addFunctionToModal(){
-  let modalClose = document.querySelector('.modal-close');
+function modalCheck(e){
+  e.preventDefault();
+  document.getElementsByName('radioA')
+      .forEach(radio => {
+        if(radio.checked){
+          modalB;
+        }
+      });
+
+
   // make "modal-a" default
   // make sure answer is selected
   // if/else: nothing selected ? modalError() : modalB
   // if/else nothing selected? modalError() : modalSuccess()
-  modalClose.addEventListener("click", function(){
-    modalBg.classList.remove("bg-active")
-     })
+
 }
+
