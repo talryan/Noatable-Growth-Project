@@ -1,88 +1,185 @@
 
-  document.addEventListener("DOMContentLoaded", () => {
-  modalA() 
-
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelector('.x').addEventListener('click', startSurvey)
+startSurvey();
 }) 
 
 
-function modalA(){
-  let modal = document.querySelector(".modal");
+function startSurvey(){
+  alert("Clearing Local Storage and starting survey")
+  window.localStorage.clear();
+  childrenModal();
+}
+
+function childrenModal(){
+  let modal = document.querySelector(".modal-body");
  
   modal.innerHTML =
   `
-  <span class="modal-close"> X </span>
   <form> 
-  <label class="label"> We want to make sure we offer relevant products</label> <br> <br>
+  <div class="modal-content"> 
+  <label class="title"> We want to make sure we offer relevant products</label> 
   <Strong> Do you have any children? </Strong><br>
-  <strong> Yes </strong>
-  <input  type="radio" class="radio" id="modalAYes" name="radioA" value="yes">
-  <strong> No </strong> 
-  <input  type="radio" class="radio" id="modalANo" name="radioA" value="no"><br>
+  <div class="radio-strong">
+  <strong class="radio-label"> Yes </strong>
+  <strong class="radio-label"> No </strong> 
+  </div>
+  <div class="radio-buttons">
+  <span class="faux-radio" data-radio="yes" data-radio-name="radioChildren"></span>
+  <span class="faux-radio" data-radio="no" data-radio-name="radioChildren"></span>
+  <input  type="radio" class="radio" id="childrenModalYes" name="radioChildren" value="yes">
+  <input  type="radio" class="radio" id="childrenModalNo" name="radioChildren" value="no">
+
+  </div>
+  </div>
   <input type="submit" class="btn" value="Submit">
   </form>
   `;
  
-  modal.addEventListener('submit', modalCheck)
+  modal.addEventListener('submit',validateChildrenQuestion)
+  document.querySelectorAll('span[data-radio-name="radioChildren"]')
+  .forEach(element => element.addEventListener('click',function(){
+    console.log(this.getAttribute('data-radio'))
+    document.querySelectorAll('span[data-radio-name="radioChildren"]')
+    .forEach(e => e.classList.remove("selected"))
+    this.classList.add("selected")
+    const getAttribute = this.getAttribute('data-radio')
+    document.querySelectorAll(`input[name="radioChildren"]`)
+    .forEach(x => x.removeAttribute("checked"))
+    document.querySelector(`input[name="radioChildren"][value="${getAttribute}"]`)
+    .setAttribute("checked", "checked")
+  }));
 
 }
 
+function validateChildrenQuestion(e){
+  e.preventDefault();
+  let modal = document.querySelector(".modal-body");
+  modal.removeEventListener('submit',validateChildrenQuestion)
+  const radioChildren =document.getElementsByName('radioChildren')
+  let radioInputA
+  let isValid = false
+  let answer = {}
+  for (var i = 0, length = radioChildren.length; i < length; i++) {
+    if (radioChildren[i].checked) {
+      answer = {hasChildren:radioChildren[i].value === "yes"}
+        radioInputA= radioChildren[i].value
+        isValid = true
+        break
+    }
+  }
+    if (isValid){
+      saveResponse(answer,petModal);
+    }
+    else {
+      modalError();
+    }
+    
+}
 
 
-function modalB(event){
-  
-  event.preventDefault();
-  
-  let modal = document.querySelector(".modal");
+function petModal(){
+  let modal = document.querySelector(".modal-body");
   modal.innerHTML =
   `
   <form> 
-  <h5> Last Question</h5> 
-  <Strong> Do you have any pets?</Strong><br>
-  <strong> Yes </strong>
-  <input  type="radio" id="modalBYes" name="radioB" value= "true"><br> 
-  <strong> No </strong> 
-  <input  type="radio" id="modalBNo" name="radioB" value= "false"><br>
+  <div class="modal-content"> 
+  <label class= "title"> Last Question </label> 
+  <Strong> Do you have any pets?</Strong> <br>
+  <div class="radio-strong">
+  <strong class="radio-label"> Yes </strong>
+  <strong class="radio-label"> No </strong> 
+  </div>
+  <div class="radio-buttons">
+  <span class="faux-radio" data-radio="yes" data-radio-name="radioPets"></span>
+  <span class="faux-radio" data-radio="no" data-radio-name="radioPets"></span>
+  <input  type="radio" class="radio" id="petModalYes" name="radioPets" value="yes">
+  <input  type="radio"  class="radio" id="petModalNo" name="radioPets" value="no"><br>
+  </div>
+  </div>
   <input type="submit" class="btn" value="Submit">
   </form>
 
   `;
-  modal.addEventListener("submit", modalSuccess)
+  modal.addEventListener('submit', validatePetQuestion)
+  document.querySelectorAll('span[data-radio-name="radioPets"]')
+  .forEach(element => element.addEventListener('click',function(){
+    console.log(this.getAttribute('data-radio'))
+    document.querySelectorAll('span[data-radio-name="radioPets"]')
+    .forEach(e => e.classList.remove("selected"))
+    this.classList.add("selected")
+    const getAttribute = this.getAttribute('data-radio')
+    document.querySelectorAll(`input[name="radioPets"]`)
+    .forEach(x => x.removeAttribute("checked"))
+    document.querySelector(`input[name="radioPets"][value="${getAttribute}"]`)
+    .setAttribute("checked", "checked")
+  }));
 }
 
-function modalError(){
-  let modalError = document.querySelector(".modal-error");
-  modalError.innerHTML +=
+function validatePetQuestion(e){
+  e.preventDefault();
+  let modal = document.querySelector(".modal-body");
+  modal.removeEventListener('submit',validatePetQuestion)
+  const radioPets = document.getElementsByName('radioPets')
+  let isValid = false;
+  let answer = {};
+  for (var i = 0, length = radioPets.length; i < length; i++) {;
+    if (radioPets[i].checked) {;
+      answer = {hasPets:radioPets[i].value === "yes"};
+        isValid = true;
+        break;
+    };
+  };
+    if (isValid){;
+      saveResponse(answer,modalSuccess);
+    }
+    else {
+      modalError();
+    }
+    
+}
+
+function modalError() {
+  let modalError = document.querySelector(".modal-body");
+  modalError.innerHTML =
   `
-  You didn't select anything
-  <button class= "btn-2"> Try Again </button>
+  <div class="modal-content">
+  <label class = "error"> You didn't select anything</label> 
+  </div>
+  <button class= "btn btn-restart"> Try Again </button>
   `
+  const targetModal = getFailedQuestionModal();
+  document.querySelector(".btn-restart").addEventListener('click', targetModal)
+}
+
+function getFailedQuestionModal(){
+  const key = "response"
+  let responseStr = window.localStorage.getItem(key);
+  let response = responseStr ? JSON.parse(responseStr) : {};
+  return response.hasOwnProperty('hasChildren') ? petModal : childrenModal; 
 }
 
 function modalSuccess(){
 
-  let modalSuccess = document.querySelector(".modal");
+  let modalSuccess = document.querySelector(".modal-body");
   modalSuccess.innerHTML =
   `
- <label class ="test"> Thank you for sharing!</label> <br> <br>
- <button class= "btn-2"> Close </button>
+  <div class="modal-content">
+ <label class ="thank-you"> Thank you for sharing!</label> <br> <br>
+ </div>
+ <button class= "btn btn-close"> Close </button>
   `
+  document.querySelector(".btn-close").addEventListener('click', startSurvey)
 }
 
 
-function modalCheck(e){
-  e.preventDefault();
-  document.getElementsByName('radioA')
-      .forEach(radio => {
-        if(radio.checked){
-          modalB;
-        }
-      });
+function saveResponse(answer,callback){
+  const key = "response"
+  let responseStr = window.localStorage.getItem(key);
+  let response = responseStr ? JSON.parse(responseStr) : {};
+  response = Object.assign(response, answer);
+  window.localStorage.setItem('response', JSON.stringify(response));
 
-
-  // make "modal-a" default
-  // make sure answer is selected
-  // if/else: nothing selected ? modalError() : modalB
-  // if/else nothing selected? modalError() : modalSuccess()
+    callback();
 
 }
-
