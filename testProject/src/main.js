@@ -1,12 +1,12 @@
 
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelector('.x').addEventListener('click', startSurvey)
+  document.querySelector('.modal-x').addEventListener('click', startSurvey)
 startSurvey();
 }) 
 
 
 function startSurvey(){
-  alert("Clearing Local Storage and starting survey")
+  alert("Clearing local storage and starting survey")
   window.localStorage.clear();
   childrenModal();
 }
@@ -57,7 +57,6 @@ function validateChildrenQuestion(e){
   let modal = document.querySelector(".modal-body");
   modal.removeEventListener('submit',validateChildrenQuestion)
   const radioChildren =document.getElementsByName('radioChildren')
-  let radioInputA
   let isValid = false
   let answer = {}
   for (var i = 0, length = radioChildren.length; i < length; i++) {
